@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+Blogs
+{% endblock title %}
+
+
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-between">
+        <div class="col-md-7">
+            <div class="heading mb-3" style="font-size: 1.7rem; font-weight: 600;">
+                Checkout our Latest Blogs  <span><i class="ri-arrow-right-line"></i></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <input type="text" id="search-box" class="form-control px-4" placeholder="Search Blog" style="border-radius: 7px; font-size: 1.1rem;">
+        </div>
+    </div>
+    <div class="row">
+        <!-- Loop through all blog posts -->
+        {% for post in posts %}
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card h-100">
+                <!-- Blog image -->
+                <img src="{{ post.thumbnail.url }}" class="card-img-top" alt="{{ post.title }}" style="max-height:200px; height:200px; width:100%; object-fit:contain;">
+                <div class="card-body">
+                    <!-- Blog title -->
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <!-- Blog author and date -->
+                    <p class="card-text">
+                        <small class="text-muted">By {{ post.author }} on {{ post.published_date|date:"F d, Y" }}</small>
+                    </p>
+                    <!-- Blog content excerpt -->
+                    <p class="card-text">{{ post.content|truncatewords:30 }}....</p>
+                    <!-- Read more link -->
+                    <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

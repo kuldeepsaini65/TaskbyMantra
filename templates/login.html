@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}
+SignIn
+{% endblock title %}
+
+
+
+{% block content %}
+<div class="container mt-5 px-5 pb-5 shadow shadow-md" style="width: 400px; border: 2px olivedrab solid; border-radius: 12px;">
+    <div class="heading my-5">
+        <h1 style="font-size: 1.8rem ;" class="text-center">
+            Login Form
+        </h1>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row gap-3 justify-content-center">
+            <div class="col-md-12 justify-content-center">
+                <input type="text" class="form-control" name="username" placeholder="Username (admin)">
+            </div>
+            <div class="col-md-12">
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password (admin123)">
+            </div>
+
+            <div class="col-md-12 ">
+                <div class="d-flex  flex-column justify-content-center align-items-center">
+                    <button type="submit" class="btn btn-outline-primary w-50 ">        
+                        Login
+                    </button>
+                    <div style="font-size: 12px;" class="mt-3">
+                        <a href="{% url 'SignUp' %}">Create Account</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        
+        
+
+        
+
+          
+    
+    </form>
+</div>
+{% endblock content %}
