@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}
+Blogs
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    
+    <div class="row">
+        <div class="col-12">
+            <h1 class="display-4">{{ post.title }}</h1>
+            <p class="text-muted">By {{ post.author }} on {{ post.published_date }}</p>
+        </div>
+    </div>
+
+    
+    <div class="row my-5">
+        <div class="col-12">
+            <div class="image-container" style="height: 250px;">
+                <img src="{{ post.thumbnail.url }}" class="img-fluid shadow-lg rounded" alt="{{ post.title }}" style="object-fit: cover; height: 100%; width: 100%;">
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="post-content fs-5">
+                {{ post.content }}
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="row my-5">
+        <div class="col-md-3">
+            <a href="{% url 'share-post' post.id %}" class="btn btn-secondary">Share via Email</a>
+        </div>
+    </div>
+    <!-- Like/Unlike Button Section -->
+    <div class="like-section mt-4">
+        <form method="POST" action="{% url 'post-like' post.slug %}">
+            {% csrf_token %}
+            {% if user.is_authenticated %}
+                <!-- Use the 'user_has_liked' context variable to show like/unlike button -->
+                {% if user_has_liked %}
+                    <button type="submit" class="btn btn-outline-danger">
+                        <i class="fa-solid fa-heart" style="color: rgb(230, 48, 48);"></i> Unlike
+                    </button>
+                {% else %}
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-regular fa-heart"></i> Like this Post
+                    </button>
+                {% endif %}
+            {% else %}
+                <p><a href="{% url 'SignIn' %}" class="btn btn-outline-primary">Login to like</a></p>
+            {% endif %}
+        </form>
+
+        <!-- Display the number of likes -->
+        <p class="mt-2">{{ post.likes.count }} {{ post.likes.count|pluralize:"Like,Likes" }}</p>
+    </div>
+
+    <div class="row my-5">
+        <div class="col-12">
+            <h3>Comments</h3>
+            <div class="comments-list mb-4">
+                {% for comment in comments %}
+                <div class="comment border-bottom pb-3 mb-3">
+                    <strong>{{ comment.user }}</strong>: {{ comment.content }}
+                    <div class="like-section mt-2">
+                        <form method="POST" action="{% url 'toggle-like' comment.id %}">
+                            {% csrf_token %}
+                            {% if user.is_authenticated %}
+                                {% if comment.user_has_liked %}
+                                    <button type="submit" class="btn btn-sm btn-danger"> <i class="fa-solid fa-heart" style="color: rgb(230, 48, 48);"></i> Unlike</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-sm btn-primary"> <i class="fa-regular fa-heart"></i> Like</button>
+                                {% endif %}
+                            {% else %}
+                                <p><a href="{% url 'SignIn' %}">Login</a> to like this comment</p>
+                            {% endif %}
+                        </form>
+            
+                        
+                        <span>{{ comment.likes.count }} {{ comment.likes.count|pluralize:"like,likes" }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+            
+            </div>
+    
+            <div class="post-comment">
+                <h4 class="mb-3">Add a Comment</h4>
+                <form method="POST" action="{% url 'add-comment' post.slug %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <textarea name="content" class="form-control" rows="3" placeholder="Write your comment here..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+    
+   
+</div>
+{% endblock content %}

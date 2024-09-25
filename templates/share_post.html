@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Share "{{ post.title }}"</h3>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted text-center mb-4">Send this blog post to a friend via email</p>
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control {% if form.name.errors %}is-invalid{% endif %}" id="name" name="name" placeholder="Enter your name" required>
+                            <div class="invalid-feedback">
+                                {% for error in form.name.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input type="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="email" name="email" placeholder="Enter your email" required>
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="to" class="form-label">Recipient's Email</label>
+                            <input type="email" class="form-control {% if form.to.errors %}is-invalid{% endif %}" id="to" name="to" placeholder="Enter recipient's email" required>
+                            <div class="invalid-feedback">
+                                {% for error in form.to.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="comments" class="form-label">Comments</label>
+                            <textarea class="form-control {% if form.comments.errors %}is-invalid{% endif %}" id="comments" name="comments" rows="4" placeholder="Add a personal message (optional)"></textarea>
+                            <div class="invalid-feedback">
+                                {% for error in form.comments.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane"></i> Send Email
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}
+
